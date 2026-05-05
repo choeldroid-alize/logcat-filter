@@ -38,6 +38,12 @@ adb logcat | logcat-filter --tag MyApp --level W
 
 Only log lines matching the tag `MyApp` at warning level or above will be shown, highlighted in the terminal.
 
+**Example — read from a saved logcat file:**
+
+```bash
+logcat-filter --file app.log --tag MyApp
+```
+
 ---
 
 ## Requirements
