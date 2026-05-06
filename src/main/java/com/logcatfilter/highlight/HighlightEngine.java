@@ -54,6 +54,9 @@ public class HighlightEngine {
 
     /**
      * Applies all highlight rules to a raw string.
+     *
+     * @param text the raw string to highlight
+     * @return the string with all highlight rules applied, or an empty string if {@code text} is null
      */
     public String highlightRaw(String text) {
         if (text == null) {
@@ -71,5 +74,23 @@ public class HighlightEngine {
 
     public boolean hasRules() {
         return !rules.isEmpty();
+    }
+
+    /**
+     * Applies all highlight rules to each entry in the given list and returns the results.
+     *
+     * @param entries the list of logcat entries to highlight
+     * @return a list of highlighted message strings in the same order as the input;
+     *         entries that are {@code null} are represented as empty strings
+     */
+    public List<String> highlightAll(List<LogcatEntry> entries) {
+        if (entries == null) {
+            return Collections.emptyList();
+        }
+        List<String> results = new ArrayList<>(entries.size());
+        for (LogcatEntry entry : entries) {
+            results.add(highlight(entry));
+        }
+        return results;
     }
 }
