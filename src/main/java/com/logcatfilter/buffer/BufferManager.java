@@ -23,8 +23,13 @@ public class BufferManager {
     /**
      * Ingests a new entry. If autoClearOnOverflow is enabled and the buffer
      * is at capacity, the buffer is cleared before adding.
+     *
+     * @throws IllegalArgumentException if entry is null
      */
     public void ingest(LogcatEntry entry) {
+        if (entry == null) {
+            throw new IllegalArgumentException("Cannot ingest a null LogcatEntry");
+        }
         if (config.isAutoClearOnOverflow() && buffer.size() >= config.getCapacity()) {
             totalEvicted += buffer.size();
             buffer.clear();
@@ -61,5 +66,19 @@ public class BufferManager {
 
     public BufferConfig getConfig() {
         return config;
+    }
+
+    /**
+     * Returns the ratio of evicted entries to total ingested entries,
+     * representing how often overflow has occurred. Returns 0.0 if nothing
+     * has been ingested yet.
+     *
+     * @return eviction rate as a value between 0.0 and 1.0
+     */
+    public double getEvictionRate() {
+        if (totalIngested == 0) {
+            return 0.0;
+        }
+        return (double) totalEvicted / totalIngested;
     }
 }
