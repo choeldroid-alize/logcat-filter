@@ -86,4 +86,18 @@ class OutputFormatterTest {
 
         assertFalse(result.contains("["));
     }
+
+    @Test
+    void formatWarnLevelUsesYellowColor() {
+        LogcatEntry warnEntry = new LogcatEntry(
+                "2024-01-15 10:23:45.123", "1234", "5678",
+                "W", "NetworkManager", "Connection timeout");
+        OutputFormatter formatter = new OutputFormatter(true);
+        String result = formatter.format(warnEntry, Collections.emptyList());
+
+        // WARN level should use yellow
+        assertTrue(result.contains("\u001B[33m"));
+        // Should end with reset
+        assertTrue(result.endsWith("\u001B[0m"));
+    }
 }
