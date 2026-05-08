@@ -43,6 +43,24 @@ public class BufferManager {
         totalIngested++;
     }
 
+    /**
+     * Ingests multiple entries in order. Null entries within the list are
+     * skipped rather than throwing, but a null list itself throws.
+     *
+     * @param entries the list of LogcatEntry objects to ingest
+     * @throws IllegalArgumentException if the entries list is null
+     */
+    public void ingestAll(List<LogcatEntry> entries) {
+        if (entries == null) {
+            throw new IllegalArgumentException("Cannot ingest a null list of entries");
+        }
+        for (LogcatEntry entry : entries) {
+            if (entry != null) {
+                ingest(entry);
+            }
+        }
+    }
+
     public List<LogcatEntry> getEntries() {
         return buffer.snapshot();
     }
