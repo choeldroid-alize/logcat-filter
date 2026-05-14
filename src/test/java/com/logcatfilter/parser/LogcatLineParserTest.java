@@ -78,4 +78,18 @@ class LogcatLineParserTest {
         assertTrue(result.isPresent());
         assertEquals(line, result.get().getRawLine());
     }
+
+    @Test
+    void shouldParseTimestampMonthAndDay() {
+        String line = "03-22 08:15:30.123  1234  5678 D TimestampTag: check date";
+        Optional<LogcatEntry> result = parser.parse(line);
+
+        assertTrue(result.isPresent());
+        LogcatEntry entry = result.get();
+        assertEquals(3, entry.getTimestamp().getMonthValue());
+        assertEquals(22, entry.getTimestamp().getDayOfMonth());
+        assertEquals(8, entry.getTimestamp().getHour());
+        assertEquals(15, entry.getTimestamp().getMinute());
+        assertEquals(30, entry.getTimestamp().getSecond());
+    }
 }
