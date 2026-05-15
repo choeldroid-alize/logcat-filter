@@ -67,6 +67,11 @@ class HotkeyRegistryTest {
     }
 
     @Test
+    void findByActionReturnsEmptyForNull() {
+        assertFalse(registry.findByAction(null).isPresent());
+    }
+
+    @Test
     void getAllBindingsIsUnmodifiable() {
         List<HotkeyBinding> bindings = registry.getAllBindings();
         assertNotNull(bindings);
@@ -79,5 +84,12 @@ class HotkeyRegistryTest {
         Optional<HotkeyBinding> result = registry.findByKey("PAGE_DOWN");
         assertTrue(result.isPresent());
         assertTrue(result.get().isRepeatable());
+    }
+
+    @Test
+    void registerNewBindingIncreasesSize() {
+        int sizeBefore = registry.size();
+        registry.register(new HotkeyBinding("CTRL+ALT+D", "debug.open", "Open Debug"));
+        assertEquals(sizeBefore + 1, registry.size());
     }
 }
