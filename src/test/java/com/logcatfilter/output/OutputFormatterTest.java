@@ -91,13 +91,27 @@ class OutputFormatterTest {
     void formatWarnLevelUsesYellowColor() {
         LogcatEntry warnEntry = new LogcatEntry(
                 "2024-01-15 10:23:45.123", "1234", "5678",
-                "W", "NetworkManager", "Connection timeout");
+                "W", "NetworkManager", "Connection timed out");
         OutputFormatter formatter = new OutputFormatter(true);
         String result = formatter.format(warnEntry, Collections.emptyList());
 
         // WARN level should use yellow
         assertTrue(result.contains("\u001B[33m"));
-        // Should end with reset
+    }
+
+    @Test
+    void formatDebugLevelUsesDefaultColor() {
+        LogcatEntry debugEntry = new LogcatEntry(
+                "2024-01-15 10:23:45.123", "1234", "5678",
+                "D", "DebugTag", "Debug message");
+        OutputFormatter formatter = new OutputFormatter(true);
+        String result = formatter.format(debugEntry, Collections.emptyList());
+
+        // DEBUG level should not use red or green or yellow
+        assertFalse(result.contains("\u001B[31m"));
+        assertFalse(result.contains("\u001B[32m"));
+        assertFalse(result.contains("\u001B[33m"));
+        // Should still end with reset
         assertTrue(result.endsWith("\u001B[0m"));
     }
 }
